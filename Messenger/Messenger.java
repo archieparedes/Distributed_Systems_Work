@@ -8,41 +8,109 @@ public class Messenger{
 		try{
 			ServerSocket server_s = new ServerSocket(Integer.parseInt(port));
 			Socket client_s = server_s.accept();
-
-			System.out.println("Client connected to server port #" + port + ".");
-		
+			Scanner scans = new Scanner(System.in);
 			DataOutputStream output = new DataOutputStream(client_s.getOutputStream());
-			DataInputStream input = new DataInputStream(client_s.getInputStream());				
+			DataInputStream input = new DataInputStream((client_s.getInputStream()));			
+			output.flush();
 
-			String message = input.readUTF();			
-			System.err.println( "Received from client: " + message );
-			output.writeUTF( message );
-			client_s.close();
+			// sending messages to client
+			Thread send = new Thread(new Runnable(){
+				String message;	
+				@Override
+				public void run() {
+					while(true){
+						message = scans.next(); // gets input from server
+						try{
+							output.writeUTF(message);
+							output.flush();
+						} catch (Exception e) {
+							System.out.println(e);
+						}
+					}
+				}
+			});
+			send.start();
+
+			// receiving messages from client
+			Thread rec = new Thread(new Runnable(){
+				String message;	
+				@Override
+				public void run() {
+					try {
+						message = input.readUTF();
+						while(message != null){
+							//System.out.println("Client says: " + message);
+							System.out.println(message);
+							message = input.readUTF();
+						}
+						System.out.println("Client disconnection.");
+						input.close();
+						server_s.close();
+						client_s.close();
+						return;
+					} catch (IOException e){
+						e.printStackTrace();
+					}
+				}
+			});
+			rec.start();
+			
 		} catch (Exception e){
-			System.out.println(e.getMessage() + " Connection Failed. Exiting");
-			return;
+			System.out.println(e.getMessage());
 		}
+		
 	}
 
 	public static void client(String port, String server_address){
-		System.out.println("hello");
 		try {
 			Socket s = new Socket(server_address, Integer.parseInt(port));
 			Scanner scans = new Scanner(System.in);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			System.out.print( "Enter message: " );
-			String message = scans.next();
-			
-			//InetAddress loopback= InetAddress.getLoopbackAddress();
-			DataOutputStream output= new DataOutputStream(s.getOutputStream());
-			DataInputStream input= new DataInputStream(s.getInputStream());				
+			DataOutputStream output = new DataOutputStream(s.getOutputStream());
+			DataInputStream input = new DataInputStream((s.getInputStream()));			
 
-			output.writeUTF(message);
-			message = input.readUTF();
-			System.out.println("message returned: " + message);
-			s.close();
-		} catch (Exception e){
-			System.out.println("Connection Failed. Exiting\n" + e);
+			// sending messages to server
+			Thread send = new Thread(new Runnable(){
+				String message;	
+				@Override
+				public void run() {
+					while(true){
+						message = scans.next(); // gets input from server
+						try{
+							output.writeUTF(message);
+							output.flush();
+						} catch (Exception e) {
+							System.out.println(e);
+						}
+					}
+				}
+			});
+			send.start();
+
+			// receiving messages from servers
+			Thread rec = new Thread(new Runnable(){
+				String message;
+				@Override
+				public void run() {
+					try{
+						message = input.readUTF();
+						while(message != null){
+							//System.out.println("Server says: " + message);
+							System.out.println(message);
+							message = input.readUTF();
+						}
+						System.out.println("Server disconnection.");
+						input.close();
+						s.close();
+						return;
+					} catch (IOException e){
+						e.printStackTrace();
+					}
+				}
+			});
+			rec.start();
+			
+		} catch (IOException e){
+			e.printStackTrace();
 		}
 	
 		
