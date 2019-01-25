@@ -11,7 +11,19 @@ public class Messenger{
 			Scanner scans = new Scanner(System.in);
 			DataOutputStream output = new DataOutputStream(client_s.getOutputStream());
 			DataInputStream input = new DataInputStream((client_s.getInputStream()));			
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			output.flush();
+			
+			// String message = "cle";
+			// String write = ".";
+			// while(!message.isEmpty()){
+			// 	message = input.readUTF();
+			// 	System.out.println(message);
+			// 	write = scans.nextLine();
+			// 	output.writeUTF(write);
+			// 	output.flush();
+			// }
+			// client_s.close();
 
 			// sending messages to client
 			Thread send = new Thread(new Runnable(){
@@ -19,7 +31,7 @@ public class Messenger{
 				@Override
 				public void run() {
 					while(true){
-						message = scans.next(); // gets input from server
+						message = scans.nextLine(); // gets input from server
 						try{
 							output.writeUTF(message);
 							output.flush();
@@ -63,10 +75,23 @@ public class Messenger{
 
 	public static void client(String port, String server_address){
 		try {
-			Socket s = new Socket(server_address, Integer.parseInt(port));
+			Socket client_s = new Socket(server_address, Integer.parseInt(port));
 			Scanner scans = new Scanner(System.in);
-			DataOutputStream output = new DataOutputStream(s.getOutputStream());
-			DataInputStream input = new DataInputStream((s.getInputStream()));			
+			DataOutputStream output = new DataOutputStream(client_s.getOutputStream());
+			DataInputStream input = new DataInputStream((client_s.getInputStream()));			
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			output.flush();
+			
+			// String message = ".";
+			// String write = ".";
+			// while(!message.isEmpty()){
+			// 	write = scans.nextLine();
+			// 	output.writeUTF(write);
+			// 	message = input.readUTF();
+			// 	System.out.println(message);
+			// 	output.flush();
+			// }
+			// client_s.close();
 
 			// sending messages to server
 			Thread send = new Thread(new Runnable(){
@@ -74,7 +99,7 @@ public class Messenger{
 				@Override
 				public void run() {
 					while(true){
-						message = scans.next(); // gets input from server
+						message = scans.nextLine(); // gets input from server
 						try{
 							output.writeUTF(message);
 							output.flush();
@@ -100,7 +125,7 @@ public class Messenger{
 						}
 						System.out.println("Server disconnection.");
 						input.close();
-						s.close();
+						client_s.close();
 						return;
 					} catch (IOException e){
 						e.printStackTrace();
