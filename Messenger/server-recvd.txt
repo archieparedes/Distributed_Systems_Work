@@ -1,4 +1,1 @@
 Hello, server
-How are you?
-Wish I could retrieve files from you
-Yeah
