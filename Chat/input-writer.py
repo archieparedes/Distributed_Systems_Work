@@ -20,6 +20,7 @@ for line in input_file:
 	try:
 		print( line, end= '' )
 		sys.stdout.flush()
+		#print( line.rstrip() )
 	except BrokenPipeError: # process receiving input ended
 		sys.exit()
 	if pace:
