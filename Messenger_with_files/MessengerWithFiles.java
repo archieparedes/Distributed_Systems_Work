@@ -21,18 +21,18 @@ class fileTransfer implements Runnable {
 	@Override
 	public void run() {
 		try {
-				Socket client_s = new Socket("localhost", lPort);
-				DataOutputStream output = new DataOutputStream(client_s.getOutputStream());
-				DataInputStream input = new DataInputStream(client_s.getInputStream());
-				output.writeUTF(fileName); // gets name
-				FileOutputStream fileOut = new FileOutputStream(fileName); // file send
-				int r;
-				byte[] buffer = new byte[1500];
-				while ((r = input.read(buffer)) != -1) {
-					fileOut.write(buffer, 0, r);
-				}
-				fileOut.close();
-				client_s.close();
+			Socket client_s = new Socket("localhost", lPort);
+			DataOutputStream output = new DataOutputStream(client_s.getOutputStream());
+			DataInputStream input = new DataInputStream(client_s.getInputStream());
+			output.writeUTF(fileName); // gets name
+			FileOutputStream fileOut = new FileOutputStream(fileName); // file send
+			int r;
+			byte[] buffer = new byte[1500];
+			while ((r = input.read(buffer)) != -1) {
+				fileOut.write(buffer, 0, r);
+			}
+			fileOut.close();
+			client_s.close();
 		} catch (Exception e) {
 			System.exit(0);
 		}
@@ -203,7 +203,6 @@ public class MessengerWithFiles {
 		} catch (Exception e) {
 			System.exit(0);
 		}
-
 	}
 
 	//////////////////////////// Server method ////////////////////////////
