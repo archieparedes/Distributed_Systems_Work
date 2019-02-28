@@ -1,0 +1,28 @@
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
+Hello, server
+Enter your message:
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
+How are you?
+Enter your message:
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
+Wish I could retrieve files from you
+Enter your message:
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
+Yeah
+Enter your message:
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
