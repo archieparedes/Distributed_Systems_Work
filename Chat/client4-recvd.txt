@@ -1,5 +1,4 @@
 What is your name?
-Sending name to server...
 client5: hello from client5
 client6: hello from client6
 client5: truly

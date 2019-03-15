@@ -1,0 +1,38 @@
+What is your name?
+Sending name and lport to server...
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
+Enter your message:
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
+client2: hello from client2
+client3: hello from client3
+Enter your message:
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
+client2: truly
+client3: Looking forward to chat
+Which file do you want?
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
+Invalid
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
+Enter your message:
+Enter an option ('m', 'f', 'x'):
+ (M)essage (send)
+ (F)ile (request)
+e(X)it
+client2: working well
+client3: Nice to meet you!
+closing your sockets...goodbye

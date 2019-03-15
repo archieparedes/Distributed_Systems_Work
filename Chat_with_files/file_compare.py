@@ -21,8 +21,8 @@ class FileCompare():
 							print( 'Comparing ' + file1 + ' (f1) and ' + file2 + ' (f2)' )
 							banner_printed= True
 						print( "Mismatch in line " + str(line_num) + ":" )
-						print( "   f1: " + f1_line )
-						print( "   f2: " + f2_line )
+						print( "   f1: " + f1_line, end= '' )
+						print( "   f2: " + f2_line, end= '' )
 					differ= True
 				line_num+= 1
 			else:
@@ -40,24 +40,27 @@ class FileCompare():
 		return differ
 		
 	def binFiles( self, file1, file2 ):
-		binfile1= open( file1, 'rb' )
-		binfile2= open( file2, 'rb' )
-		differ= False
-		more= True
-		while( more ):
-			f1_bytes= binfile1.read( 4096 )
-			f2_bytes= binfile2.read( 4096 )
-			if f1_bytes and f2_bytes:
-				if f1_bytes != f2_bytes:
-					differ= True
-					break
-			else:
-				if f1_bytes or f2_bytes:
-					differ= True
-				more= False
-		binfile1.close()
-		binfile2.close()
-		return differ		
+		try:
+			binfile1= open( file1, 'rb' )
+			binfile2= open( file2, 'rb' )
+			differ= False
+			more= True
+			while( more ):
+				f1_bytes= binfile1.read( 4096 )
+				f2_bytes= binfile2.read( 4096 )
+				if f1_bytes and f2_bytes:
+					if f1_bytes != f2_bytes:
+						differ= True
+						break
+				else:
+					if f1_bytes or f2_bytes:
+						differ= True
+					more= False
+			binfile1.close()
+			binfile2.close()
+			return differ		
+		except FileNotFoundError:
+			return True
 		
 # TESTING!!!
 if __name__ == "__main__":

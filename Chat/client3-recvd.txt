@@ -1,8 +1,8 @@
 What is your name?
 Sending name to server...
-client2: hello from client2
 client1: hello from client1
-client2: truly
+client2: hello from client2
 client1: nice day to chat
-client2: working well
+client2: truly
 client1: gotcha
+client2: working well
