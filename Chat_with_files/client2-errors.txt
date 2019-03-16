@@ -1,3 +1,0 @@
-Error: Could not find or load main class ChatClient
-Error: Could not find or load main class ChatClient
-Error: Could not find or load main class ChatClient

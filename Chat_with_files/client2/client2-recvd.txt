@@ -18,12 +18,8 @@ Enter an option ('m', 'f', 'x'):
  (F)ile (request)
 e(X)it
 client3: Looking forward to chat
+Who owns the file?
 Which file do you want?
-Enter an option ('m', 'f', 'x'):
- (M)essage (send)
- (F)ile (request)
-e(X)it
-Invalid
 Enter an option ('m', 'f', 'x'):
  (M)essage (send)
  (F)ile (request)

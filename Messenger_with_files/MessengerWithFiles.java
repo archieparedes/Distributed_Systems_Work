@@ -1,8 +1,3 @@
-/**
- * @author Archie_Paredes
- * @version 1.0
- * Created on February 20, 2019
- */
 
 import java.io.*;
 import java.net.*;
@@ -20,6 +15,7 @@ class fileTransfer implements Runnable {
 
 	@Override
 	public void run() {
+		System.out.println(fileName + " fileTransfer");
 		try {
 			Socket client_s = new Socket("localhost", lPort);
 			DataOutputStream output = new DataOutputStream(client_s.getOutputStream());
@@ -54,7 +50,8 @@ class ftC implements Runnable {
 				Socket client_s = server_s.accept();
 				DataOutputStream output = new DataOutputStream(client_s.getOutputStream());
 				DataInputStream input = new DataInputStream(client_s.getInputStream());
-				String fileName = input.readUTF();
+				String fileName = input.readUTF(); // gets file name from server
+				System.out.println(fileName + " ftC Client lport: " + lPort);
 				File file = new File(fileName);
 				FileInputStream file_input = new FileInputStream(file);
 				byte[] file_buffer = new byte[1500];
@@ -84,6 +81,7 @@ class ftS implements Runnable {
 				DataOutputStream output = new DataOutputStream(client_s.getOutputStream());
 				DataInputStream input = new DataInputStream(client_s.getInputStream());
 				String fileName = input.readUTF();
+				System.out.println(fileName + " ftS SERVER lport: " +server_s.getLocalPort());
 				File file = new File(fileName);
 				FileInputStream file_input = new FileInputStream(file);
 				byte[] file_buffer = new byte[1500];
