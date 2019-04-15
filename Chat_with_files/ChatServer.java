@@ -1,53 +1,15 @@
 /**
  * @author Archie_Paredes
- * @version 1.0
- * Server Side
+ * @version 1.1
+ * Server Side Main
  */
 
 import java.net.*;
 import java.io.*;
 import java.util.*;
 
-class fileTransfer implements Runnable { // put owner port here
-	String fileName;
-    int lPort;
-    String name;
 
-	public fileTransfer(String fileName, int p, String name) {
-		this.fileName = fileName;
-        this.lPort = p;
-        this.name = name;
-	}
-
-	@Override
-	public void run() {
-		try {
-			Socket client_s = new Socket("", lPort);
-			DataOutputStream output = new DataOutputStream(client_s.getOutputStream());
-			DataInputStream input = new DataInputStream(client_s.getInputStream());
-            output.writeUTF(fileName); // sets name for ftS
-            String direct = name +"/"+fileName; // set directory to put file
-            
-            //File file = new File(fileName);
-
-			FileOutputStream fileOut = new FileOutputStream(direct); // creates a file
-			int r;
-            byte[] buffer = new byte[1500];
-            
-			while ((r = input.read(buffer)) > 0) { // get file from ftS
-                fileOut.write(buffer, 0, r);    
-            }
-
-            output.flush();
-            fileOut.close();
-		    client_s.close();
-		} catch (Exception e) {
-			System.exit(0);
-        }
-	}
-}
-
-class ftS implements Runnable {
+final class ftS implements Runnable {
     ServerSocket server_s;
     String name;
 
@@ -65,14 +27,13 @@ class ftS implements Runnable {
 				DataInputStream input = new DataInputStream(client_s.getInputStream());
                 String fileName = input.readUTF(); // gets file name
                 String direct = name +"/"+fileName; // set directory of where the file is located
-                //File file = new File(fileName);
                 
 				FileInputStream file_input = new FileInputStream(direct); // read file
 				byte[] file_buffer = new byte[1500];
                 int r;
                 
-				while ((r = file_input.read(file_buffer)) > 0) { // send file to fileTransfer
-                    output.write(file_buffer, 0, r);
+				while ((r = file_input.read(file_buffer)) > 0) { // send file to fileTransfer.java
+                    output.write(file_buffer, 0, r); // write to fileTransfer.java
                 }
                 
                 output.flush();
@@ -84,13 +45,21 @@ class ftS implements Runnable {
 	}
 }
 
-class clients implements Runnable{
+final class clients implements Runnable{
     public Socket client_socket;
     DataInputStream input;
     DataOutputStream output;
     public String name;
     int lport;
- 
+
+    /**
+     * Handles client information
+     * @param s Socket number
+     * @param in DataInputStream for reading
+     * @param out DataOutputStream for writing
+     * @param n String name of client
+     * @param lport Int port number for file transfer
+     */
     public clients(Socket s, DataInputStream in, DataOutputStream out, String n, int lport){ // initializer
         this.client_socket = s;
         this.input = in;
@@ -108,6 +77,9 @@ class clients implements Runnable{
         }
     }
 
+    /**
+     * @param message String message/comment to send
+     */
     public void sendMessage(String message){
         try{
             if (message == null || message == ""){ // if empty or null
@@ -124,13 +96,15 @@ class clients implements Runnable{
             System.err.println(e);
             return;
         }
-       
     }
 
+    /**
+     * @param info String information of filename and owner of the file
+     */
     public void getFile(String info){
         try {
             String[] infos = info.split("@"); 
-            String owner = infos[1]; // owner name
+            String owner = infos[1]; // owner of file name
             String filename = infos[0]; // filename
             int ownerPort = Integer.MAX_VALUE; // impossible ownerPort
             String ownerName = "";
@@ -147,7 +121,7 @@ class clients implements Runnable{
                 return;
             }
             
-            System.out.println(lport + " wants "+ filename + " from "+ownerPort);
+            System.out.println(name + " " + lport + " wants "+ filename + " from "+ ownerName +" "+ownerPort);
 
             fileTransfer get = new fileTransfer(filename, ownerPort, name); 
             Thread fileTransf = new Thread(get);
@@ -194,6 +168,7 @@ public class ChatServer {
     static ArrayList<clients> client_list = new ArrayList<clients>(); // stores clients
  
     public static void main(String[] args){
+        // Example run: java ChatServer 6001
         try{
             String port = args[0]; // first argument
             ServerSocket server_s = new ServerSocket(Integer.parseInt(port));
@@ -211,7 +186,9 @@ public class ChatServer {
                 client_list.add(c); // add to list of clients
                 rec.start(); // starting the receiving thread
             }
-        } catch (Exception e){}
+        } catch (Exception e){
+            System.out.println("Error found in main\n" + e);
+        }
     }
 }
 

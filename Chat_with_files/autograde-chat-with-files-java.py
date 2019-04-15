@@ -225,4 +225,5 @@ try:
 except Exception:
 	pass
 
-print( 'Points: ' + str(points) );
+print( 'Points: ' + str(points) +"/24")
+print("Test files provided by Karen Heart, DePaul University")

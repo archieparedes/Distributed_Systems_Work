@@ -1,114 +1,55 @@
 /**
  * @author Archie_Paredes
- * @version 1.0
- * Client Side
+ * @version 1.1
+ * Client Side Main
  */
 
 import java.net.*;
 import java.io.*;
 import java.util.*;
 
-class sendType implements Runnable {
-	BufferedReader br;
-	DataOutputStream output;
-	String lPort;
-
-	public sendType(BufferedReader br, DataOutputStream output, String p) {
-		this.br = br;
-		this.output = output;
-		this.lPort = p;
-	}
-
-	@Override
-	public void run() {
-		try {
-			String inputType = "";
-
-			while (inputType != null) {
-				System.out.println("Enter an option ('m', 'f', 'x'):\n (M)essage (send)\n (F)ile (request)\ne(X)it");
-				String message = "";
-				inputType = br.readLine(); // gets input from client
-				if (inputType.equals("m")) {
-					System.out.println("Enter your message:");
-					message = br.readLine();
-					if(inputType.isEmpty()){ // if the input is empty, close
-						try{
-							br.close();
-							output.close();
-							System.exit(0);
-						} catch (Exception e1){System.exit(0);}
-					}
-					output.writeUTF(inputType);
-					output.writeUTF(message);
-					
-				} else if (inputType.equals("f")) {
-                    System.out.println("Who owns the file?");
-                    String owner = br.readLine();
-					System.out.println("Which file do you want?");
-					String fileName = br.readLine();
-					String ownerFile = fileName+"@"+owner;
-					output.writeUTF(inputType);
-					output.writeUTF(ownerFile);
-				} else if (inputType.equals("x")) {
-                    output.writeUTF(inputType);
-					System.out.println("closing your sockets...goodbye");
-					br.close();
-					output.close();
-					System.exit(0);
-				} else {
-					System.out.println("Invalid");
-				}
-			}
-			output.writeUTF("");
-		} catch (IOException e) {
-			System.exit(0);
-		}
-	}
-}
-
-
- 
 public class ChatClient {    
     public static void main(String[] args){
         if(args.length < 1) throw new IllegalArgumentException("No arguments found"); // if address found in args
  
         try {
-            Socket client_s;
-            DataOutputStream output;
-            DataInputStream input;     
-            BufferedReader br;
-           
+            // Example run: java ChatClient -l 6002 -p 6001
             String server_address;
             String port = args[3];
             String secondPort = args[1];
- 
+
             try{    // if no second argument, default to local host
                 server_address = args[4];
             } catch (Exception e){
                 server_address = "localhost";
             }
-			
-            client_s = new Socket(server_address, Integer.parseInt(port));
-            output = new DataOutputStream(client_s.getOutputStream());
-            input = new DataInputStream((client_s.getInputStream()));  
-            br = new BufferedReader(new InputStreamReader(System.in));
- 
+
+            Socket client_s = new Socket(server_address, Integer.parseInt(port));
+            DataOutputStream output = new DataOutputStream(client_s.getOutputStream());
+            DataInputStream input = new DataInputStream((client_s.getInputStream()));  
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
             // send name to server
             String name = "";
             System.out.println("What is your name?");
             name = br.readLine();
+            
+            // folder to transfer files
+            File f = new File("./"+name);
+            if (f.exists() && f.isDirectory()) { // checks if file exists in directory
+                System.out.println("Client Folder Exists");
+            } else { // else makes a local folder for user
+                new File("./"+name).mkdirs();
+                System.out.println("Folder created for "+name);
+            }
             output.writeUTF(name);
             output.flush();
             output.writeUTF(secondPort);
             System.out.println("Sending name and lport to server...");
 
-        	//ftC fileClient = new ftC(secondPort); // connect client to file transfer port
 			sendType send = new sendType(br, output, port); // what type of send does client want to do?
 			Thread sendThread = new Thread(send);
-			//Thread fileTransferClient = new Thread(fileClient);
-			
 			sendThread.start();
-			//fileTransferClient.start();
 
             String message;
 			try {

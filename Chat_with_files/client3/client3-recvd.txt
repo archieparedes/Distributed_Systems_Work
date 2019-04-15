@@ -1,4 +1,5 @@
 What is your name?
+adasd
 Sending name and lport to server...
 Enter an option ('m', 'f', 'x'):
  (M)essage (send)
