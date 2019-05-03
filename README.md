@@ -10,6 +10,9 @@ If you are using this repo as a reference to an assignment, I am not responsible
 
 # OVERVIEW
 Messenger: Regular text chat for server and client
+
 Chat: Regular text chat with multiple users
+
 Messenger with files: Regular text chat for server and client. Allows for file transfer
+
 Chat with files: Regular text chat with multiple users. Allows for file transfer
